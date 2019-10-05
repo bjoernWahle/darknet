@@ -1,3 +1,4 @@
+import os
 from ctypes import *
 import math
 import random
@@ -45,7 +46,8 @@ class METADATA(Structure):
     
 
 #lib = CDLL("/home/pjreddie/documents/darknet/libdarknet.so", RTLD_GLOBAL)
-lib = CDLL("libdarknet.so", RTLD_GLOBAL)
+path = os.path.join(os.getcwd(), "libdarknet.so")
+lib = CDLL(path, RTLD_GLOBAL)
 lib.network_width.argtypes = [c_void_p]
 lib.network_width.restype = c_int
 lib.network_height.argtypes = [c_void_p]
@@ -148,9 +150,10 @@ if __name__ == "__main__":
     #meta = load_meta("cfg/imagenet1k.data")
     #r = classify(net, meta, im)
     #print r[:10]
-    net = load_net("cfg/tiny-yolo.cfg", "tiny-yolo.weights", 0)
-    meta = load_meta("cfg/coco.data")
-    r = detect(net, meta, "data/dog.jpg")
-    print r
+    root = os.getcwd()
+    net = load_net(os.path.join(root, "cfg", "yolov3.cfg").encode("utf-8"), os.path.join(root, "yolov3.weights").encode("utf-8"), 0)
+    meta = load_meta(os.path.join(root, "cfg","coco.data"))
+    r = detect(net, meta, os.path.join(root, "data", "dog.jpg"))
+    print(r)
     
 
