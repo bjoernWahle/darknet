@@ -152,8 +152,8 @@ if __name__ == "__main__":
     #print r[:10]
     root = os.getcwd()
     net = load_net(os.path.join(root, "cfg", "yolov3.cfg").encode("utf-8"), os.path.join(root, "yolov3.weights").encode("utf-8"), 0)
-    meta = load_meta(os.path.join(root, "cfg","coco.data"))
-    r = detect(net, meta, os.path.join(root, "data", "dog.jpg"))
+    meta = load_meta(os.path.join(root, "cfg","coco.data").encode("utf-8"))
+    r = detect(net, meta, os.path.join(root, "data", "dog.jpg").encode("utf-8"))
     print(r)
     
 
