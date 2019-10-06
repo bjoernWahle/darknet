@@ -1,4 +1,6 @@
+import argparse
 import os
+import pickle
 from ctypes import *
 import math
 import random
@@ -150,10 +152,22 @@ if __name__ == "__main__":
     #meta = load_meta("cfg/imagenet1k.data")
     #r = classify(net, meta, im)
     #print r[:10]
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("-i", "--images_path")
+    parser.add_argument("-o", "--output_path")
+
+    args = parser.parse_args()
+
     root = os.getcwd()
     net = load_net(os.path.join(root, "cfg", "yolov3.cfg").encode("utf-8"), os.path.join(root, "yolov3.weights").encode("utf-8"), 0)
     meta = load_meta(os.path.join(root, "cfg","coco.data").encode("utf-8"))
-    r = detect(net, meta, os.path.join(root, "data", "dog.jpg").encode("utf-8"))
-    print(r)
+    for root, dirnames, filenames in os.walk(args.images_path):
+        for filename in filenames:
+            name, ext = filename.split(".")
+            r = detect(net, meta, os.path.join(args.images_path, filename).encode("utf-8"))
+            with open(os.path.join(args.output_path, name+".pickle"), "wb") as f:
+                pickle.dump(r, f)
+                f.close()
     
 
